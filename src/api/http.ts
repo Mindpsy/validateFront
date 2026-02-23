@@ -3,7 +3,7 @@ import { ElNotification } from 'element-plus';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
-  timeout: 10000,
+  timeout: 30000,
 });
 
 api.interceptors.request.use((config) => {
@@ -17,11 +17,13 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    const message =
-      error?.response?.data?.error?.message ||
-      error?.response?.data?.message ||
-      error.message ||
-      'Unknown API error';
+    const isTimeout = error?.code === 'ECONNABORTED' || error?.message?.includes('timeout');
+    const message = isTimeout
+      ? 'Сервер не отвечает. Проверьте, что бэкенд запущен и доступен по указанному адресу.'
+      : error?.response?.data?.error?.message ||
+        error?.response?.data?.message ||
+        error.message ||
+        'Unknown API error';
     ElNotification({
       title: 'Ошибка',
       message,
