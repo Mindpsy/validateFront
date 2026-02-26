@@ -1,8 +1,16 @@
 import axios from 'axios';
 import { ElNotification } from 'element-plus';
 
+function normalizeBaseURL(raw: string | undefined): string {
+  const fallback = 'http://localhost:3000/api';
+  const value = (raw || '').trim() || fallback;
+  if (value === fallback) return fallback;
+  if (value.startsWith('http://') || value.startsWith('https://')) return value;
+  return `https://${value}`;
+}
+
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
+  baseURL: normalizeBaseURL(import.meta.env.VITE_API_BASE_URL),
   timeout: 30000,
 });
 
