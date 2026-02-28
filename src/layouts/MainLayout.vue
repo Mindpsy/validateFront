@@ -4,6 +4,7 @@
       <div class="logo">Validate Admin</div>
       <el-menu :default-active="route.path" router>
         <el-menu-item index="/clients">Клиенты</el-menu-item>
+        <el-menu-item index="/integration">Подключение к сайту</el-menu-item>
         <el-menu-item index="/blacklist">Глобальный чёрный список</el-menu-item>
         <el-menu-item index="/logs">Логи</el-menu-item>
         <el-menu-item index="/providers">Провайдеры</el-menu-item>

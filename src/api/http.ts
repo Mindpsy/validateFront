@@ -9,8 +9,13 @@ function normalizeBaseURL(raw: string | undefined): string {
   return `https://${value}`;
 }
 
+/** Базовый URL API (для страницы интеграции и скрипта встраивания). */
+export function getApiBase(): string {
+  return normalizeBaseURL(import.meta.env.VITE_API_BASE_URL);
+}
+
 export const api = axios.create({
-  baseURL: normalizeBaseURL(import.meta.env.VITE_API_BASE_URL),
+  baseURL: getApiBase(),
   timeout: 30000,
 });
 

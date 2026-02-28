@@ -8,6 +8,7 @@ import WhitelistPage from '../pages/Whitelist.vue';
 import ClientBlacklistPage from '../pages/ClientBlacklist.vue';
 import LogsPage from '../pages/Logs.vue';
 import ProvidersPage from '../pages/Providers.vue';
+import IntegrationPage from '../pages/Integration.vue';
 
 const routes: RouteRecordRaw[] = [
   { path: '/login', component: LoginPage, meta: { guestOnly: true } },
@@ -17,6 +18,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', redirect: '/clients' },
       { path: 'clients', component: ClientsPage },
+      { path: 'integration', component: IntegrationPage },
       { path: 'clients/new', component: ClientFormPage },
       { path: 'clients/:id/edit', component: ClientFormPage },
       { path: 'clients/:clientId/whitelist', component: WhitelistPage },
