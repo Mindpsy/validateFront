@@ -2,12 +2,12 @@
   <div class="login-page">
     <el-card class="login-card">
       <template #header>Вход в админ-панель</template>
-      <el-form :model="form" @submit.prevent="submit">
+      <el-form :model="form" label-width="80px" @submit.prevent="submit">
         <el-form-item label="Email">
-          <el-input v-model="form.email" />
+          <el-input v-model="form.email" placeholder="email@example.com" />
         </el-form-item>
         <el-form-item label="Пароль">
-          <el-input v-model="form.password" type="password" show-password />
+          <el-input v-model="form.password" type="password" show-password placeholder="••••••••" />
         </el-form-item>
         <el-button type="primary" :loading="loading" @click="submit">Войти</el-button>
       </el-form>
