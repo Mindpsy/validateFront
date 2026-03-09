@@ -307,7 +307,7 @@ async function generate() {
   // Сохраняем выбранного провайдера в настройки клиента
   try {
     await clientsApi.update(clientId.value, {
-      settings: { providerId: providerId.value },
+      providerId: providerId.value,
     });
   } catch {
     ElMessage.error('Не удалось сохранить провайдера для клиента');
