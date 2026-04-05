@@ -67,6 +67,11 @@
         </div>
       </el-form-item>
 
+      <el-form-item label="Текст кнопки">
+        <el-input v-model="buttonText" placeholder="Подтвердить номер" style="width: 400px" />
+        <div class="hint">Текст экшен-кнопки, которую увидит пользователь до открытия формы</div>
+      </el-form-item>
+
       <el-form-item>
         <el-button
           type="primary"
@@ -110,15 +115,19 @@
         <p>Вставьте тег <code>&lt;script&gt;</code> (блок выше) перед закрывающим <code>&lt;/body&gt;</code>.</p>
 
         <h4>Шаг 2. Разметьте блоки на странице</h4>
-        <p>Создайте два блока с фиксированными <code>id</code>:</p>
+        <p>Создайте три блока с фиксированными <code>id</code>:</p>
         <ul>
           <li>
-            <code>id="validate-form"</code> — контейнер, куда будет отрисована форма валидации.
-            Скрипт автоматически отрисует форму в этом блоке.
+            <code>id="validate-button"</code> — контейнер для экшен-кнопки.
+            Скрипт автоматически отрисует кнопку. По клику — кнопка скроется и появится форма.
           </li>
           <li>
-            <code>id="validate-target"</code> — блок с целевым действием (например, форма заказа).
-            Он будет автоматически скрыт при загрузке и показан после успешной верификации.
+            <code>id="validate-form"</code> — контейнер формы валидации.
+            Форма скрыта при загрузке, появляется после клика по кнопке.
+          </li>
+          <li>
+            <code>id="validate-target"</code> — блок с целевым контентом (например, кликабельный номер телефона).
+            Скрыт при загрузке, показывается после успешной верификации.
           </li>
         </ul>
 
@@ -204,12 +213,16 @@
           </thead>
           <tbody>
             <tr>
+              <td><code>validate-button</code></td>
+              <td>Контейнер экшен-кнопки. Скрипт рендерит кнопку, по клику — скрывается и показывается форма.</td>
+            </tr>
+            <tr>
               <td><code>validate-form</code></td>
-              <td>Контейнер формы валидации. Используется функциями <code>renderForm()</code> и <code>toggleForm()</code>.</td>
+              <td>Контейнер формы валидации. Скрыт при загрузке, появляется после клика по кнопке.</td>
             </tr>
             <tr>
               <td><code>validate-target</code></td>
-              <td>Блок с целевым действием. Скрывается при загрузке, показывается после подтверждения функцией <code>showTarget()</code>.</td>
+              <td>Целевой контент. Скрыт при загрузке, показывается после успешного подтверждения номера.</td>
             </tr>
           </tbody>
         </table>
@@ -234,6 +247,7 @@ const clientId = ref<number | null>(null);
 const providerId = ref<number | null>(null);
 const apiKey = ref('');
 const apiBase = ref(getApiBase());
+const buttonText = ref('Подтвердить номер');
 const generated = ref(false);
 
 onMounted(async () => {
@@ -264,17 +278,22 @@ const scriptSnippet = computed(() => {
   if (!clientId.value || !apiBase.value) return '';
   const base = apiBase.value.trim().replace(/\/+$/, '');
   const key = apiKey.value || 'ВСТАВЬТЕ_ВАШ_API_КЛЮЧ';
-  const url = `${base}/embed/validate.js?clientId=${clientId.value}&apiKey=${encodeURIComponent(key)}&apiBase=${encodeURIComponent(base)}`;
+  const btnParam = buttonText.value && buttonText.value !== 'Подтвердить номер' ? `&buttonText=${encodeURIComponent(buttonText.value)}` : '';
+  const url = `${base}/embed/validate.js?clientId=${clientId.value}&apiKey=${encodeURIComponent(key)}&apiBase=${encodeURIComponent(base)}${btnParam}`;
   return `<script src="${url}"><\/script>`;
 });
 
 const htmlSnippet = computed(() => {
-  return `<!-- Блок формы валидации (будет отрисована автоматически) -->
+  return `<!-- Экшен-кнопка (видна сразу, скрывается после клика) -->
+<div id="validate-button"></div>
+
+<!-- Форма валидации (скрыта до клика по кнопке) -->
 <div id="validate-form"></div>
 
-<!-- Блок целевого действия (скрыт до подтверждения номера) -->
+<!-- Целевой контент (скрыт до подтверждения номера) -->
 <div id="validate-target">
-  <!-- Ваш контент: форма заказа, кнопка и т.д. -->
+  <!-- Например, кликабельный номер телефона -->
+  <a href="tel:+79991234567">+7 (999) 123-45-67</a>
 </div>`;
 });
 
