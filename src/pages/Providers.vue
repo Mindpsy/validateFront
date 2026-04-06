@@ -29,6 +29,7 @@
           <el-select v-model="form.type">
             <el-option label="SMS" value="sms" />
             <el-option label="Flash" value="flash" />
+            <el-option label="Voice" value="voice" />
           </el-select>
         </el-form-item>
         <el-form-item label="Активен"><el-switch v-model="form.isActive" /></el-form-item>
@@ -54,7 +55,7 @@ const dialog = ref(false);
 const editingId = ref<number | null>(null);
 const form = reactive({
   name: '',
-  type: 'sms' as 'sms' | 'flash',
+  type: 'sms' as 'sms' | 'flash' | 'voice',
   isActive: true,
   configJson: '{}',
 });
